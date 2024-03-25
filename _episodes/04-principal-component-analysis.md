@@ -720,12 +720,12 @@ represents.
 > > 
 > > ~~~
 > > pc <- pca(mat, metadata = metadata) # implement a PCA
-> > # We can check the scree plot to see that many principal components
-> > # explain a very small amount of the total variance in the data
+> > #We can check the scree plot to see that many principal components explain a very small amount of
+> > #the total variance in the data
 > > 
-> > # Let's remove the principal components with lowest 20% of the variance
+> > #Let's remove the principal components with lowest 20% of the variance
 > > pc <- pca(mat, metadata = metadata, removeVar = 0.2)
-> > # Explore other arguments provided in pca
+> > #Explore other arguments provided in pca
 > > pc$rotated[1:5, 1:5] # obtain the first 5 principal component scores for the first 5 observations
 > > ~~~
 > > {: .language-r}
@@ -745,7 +745,7 @@ represents.
 > > 
 > > 
 > > ~~~
-> > pc$loadings[1:5, 1:5] # obtain the first 5 principal component loadings for the first 5 features
+> > pc$loadings[1:5, 1:5] #obtain the first 5 principal component loadings for the first 5 features
 > > ~~~
 > > {: .language-r}
 > > 
@@ -778,7 +778,9 @@ represents.
 > > 
 > > 
 > > ~~~
-> > pc$loadings[which.max(pc$loadings[, 1]), ] # principal component loadings for the feature
+> > # principal component loadings for the feature
+> > #with the maximal loading on the first principal component:
+> > pc$loadings[which.max(pc$loadings[, 1]), ] 
 > > ~~~
 > > {: .language-r}
 > > 
@@ -821,16 +823,14 @@ represents.
 > > 215281_x_at 0.003923775 0.003179556 -0.0004388192 9.664648e-05 0.003501335
 > >                    PC86        PC87          PC88         PC89         PC90
 > > 215281_x_at -0.00112973 0.006489667 -0.0005039785 -0.004296355 -0.002751513
-> >                     PC91
-> > 215281_x_at -0.002231113
+> >                    PC91
+> > 215281_x_at -0.00383085
 > > ~~~
 > > {: .output}
 > > 
 > > 
 > > 
 > > ~~~
-> > # with the maximal loading on the first principal component.
-> > 
 > > which.max(pc$loadings[, 2]) # index of the maximal loading for the second principal component
 > > ~~~
 > > {: .language-r}
@@ -845,7 +845,9 @@ represents.
 > > 
 > > 
 > > ~~~
-> > pc$loadings[which.max(pc$loadings[, 2]), ] # principal component loadings for the feature
+> > # principal component loadings for the feature
+> > #with the maximal loading on the second principal component:
+> > pc$loadings[which.max(pc$loadings[, 2]), ] 
 > > ~~~
 > > {: .language-r}
 > > 
@@ -887,16 +889,9 @@ represents.
 > >                    PC82        PC83         PC84       PC85       PC86
 > > 211122_s_at -0.01988441 0.009667348 -0.008248781 0.01198369 0.01221713
 > >                     PC87        PC88        PC89        PC90        PC91
-> > 211122_s_at -0.003864842 -0.02876816 -0.01771452 -0.02164973 0.003856584
+> > 211122_s_at -0.003864842 -0.02876816 -0.01771452 -0.02164973 0.004593411
 > > ~~~
 > > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > # with the maximal loading on the second principal component.
-> > ~~~
-> > {: .language-r}
 > > The function `pca()` is used to perform PCA, and uses as input a matrix
 > > (`mat`) containing continuous numerical data
 > > in which rows are data variables and columns are samples, and `metadata`
