@@ -9,6 +9,7 @@ limma
 viridis
 SummarizedExperiment
 glmnet
+cowplot
 PCAtools
 MASS
 scater
