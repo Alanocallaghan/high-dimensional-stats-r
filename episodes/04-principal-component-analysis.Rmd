@@ -104,7 +104,7 @@ capturing the overall effect in the data that has the second-highest variability
 library(ggplot2)
 library(PCAtools)
 library(cowplot)
-prostate <- readRDS(here("data/prostate.rds"))
+prostate <- readRDS("data/prostate.rds")
 
 # pca, set 2 variables so directions look orthogonal
 pros_only2 <- prostate[, c("lcavol", "lpsa")]
@@ -217,7 +217,7 @@ First, we will examine the `prostate` dataset (originally part of the
 
 ```{r prostate-load}
 library("here")
-prostate <- readRDS(here("data/prostate.rds"))
+prostate <- readRDS("data/prostate.rds")
 ```
 
 ```{r prostate-head}
@@ -504,7 +504,7 @@ associated metadata, downloaded from the
 
 ```{r se}
 library("SummarizedExperiment")
-cancer <- readRDS(here("data/cancer_expression.rds"))
+cancer <- readRDS("data/cancer_expression.rds")
 mat <- assay(cancer)
 metadata <- colData(cancer)
 ```
@@ -793,14 +793,18 @@ the **`PCAtools`** package. The function checks the range of loadings for each
 principal component specified (default: first five principal components). It then selects the features
 in the top and bottom 5% of these ranges and displays their loadings. This behaviour
 can be adjusted with the `rangeRetain` argument, which has 0.1 as the default value (i.e.
-5% on each end of the range). NB, if there are too many labels to be plotted, you will see
+5% on each end of the range). NB: if there are too many labels to be plotted, you will see
 a warning. This is not a serious problem.
 
-```{r loadingsplots, fig.cap=c("Plot of the features in the top and bottom 5 % of the loadings range for the first principal component.", "Plot of the features in the top and bottom 5 % of the loadings range for the second principal component.", fig.cap = "Plot of the features in the top and bottom 5 % of the loadings range for the either the first or second principal components."), fig.alt=c("A plot with component loading versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range and only for the first principal component. The component loading values for four features are shown. The features with the highest loadings are shown at the top of the plot and consist of three features, each with a blue dot and feature label. The feature with the lowest loading is shown at the bottom of the plot and delineated by a yellow dot with a feature label.", 
-    "A plot with component loadings versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range and only for the second principal component. The component loading values for 9 features are shown. The features with the highest loadings are shown at the top of the plot and consist of 6 features, each with a blue dot and feature label. The 3 features at the lower range are at the bottom of the plot and delineated by a yellow dot with a feature label.", 
-    fig.alt = "A plot with component loading versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range for either principal component. The component loading values for several features are shown with loading score-delineated colours ranging from dark blue for the highest loadings and dark yellow for the lowest loadings. Each point has a feature label. The loadings of features points for the first principal component are concentrated towards the top, while the loadings of features points for the second principal components are concentrated at the top, middle and bottom of the range.")}
+```{r loadingsplot1, fig.cap="Plot of the features in the top and bottom 5 % of the loadings range for the first principal component.", fig.alt="A plot with component loading versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range and only for the first principal component. The component loading values for four features are shown. The features with the highest loadings are shown at the top of the plot and consist of three features, each with a blue dot and feature label. The feature with the lowest loading is shown at the bottom of the plot and delineated by a yellow dot with a feature label."}
 plotloadings(pc, c("PC1"), rangeRetain = 0.1)
+```
+
+```{r loadingsplot2, fig.cap="Plot of the features in the top and bottom 5 % of the loadings range for the second principal component.", fig.alt="A plot with component loadings versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range and only for the second principal component. The component loading values for 9 features are shown. The features with the highest loadings are shown at the top of the plot and consist of 6 features, each with a blue dot and feature label. The 3 features at the lower range are at the bottom of the plot and delineated by a yellow dot with a feature label."}
 plotloadings(pc, c("PC2"), rangeRetain = 0.1)
+```
+
+```{r loadingsplot3, fig.cap="Plot of the features in the top and bottom 5 % of the loadings range for the either the first or second principal components.", fig.alt="A plot with component loading versus principal component index. The plot shows the loadings of features at the top and bottom 5 % of the loadings range for either principal component. The component loading values for several features are shown with loading score-delineated colours ranging from dark blue for the highest loadings and dark yellow for the lowest loadings. Each point has a feature label. The loadings of features points for the first principal component are concentrated towards the top, while the loadings of features points for the second principal components are concentrated at the top, middle and bottom of the range."}
 plotloadings(pc, c("PC1", "PC2"), rangeRetain = 0.1)
 ```
 

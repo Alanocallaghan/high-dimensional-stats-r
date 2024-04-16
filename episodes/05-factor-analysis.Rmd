@@ -94,7 +94,7 @@ for the purposes of this episode:
 
 ```{r prostate}
 library("here")
-prostate <- readRDS(here("data/prostate.rds"))
+prostate <- readRDS("data/prostate.rds")
 ```
 
 ```{r dims}

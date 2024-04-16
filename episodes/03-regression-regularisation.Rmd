@@ -42,10 +42,10 @@ First, let us check out what happens if we try to fit a linear model to high-dim
 data! We start by reading in the [`methylation`](https://carpentries-incubator.github.io/high-dimensional-stats-r/data/index.html)
 data from the last lesson:
 
-```{r loadmethy}
+```{r loadmethy, results = "hide"}
 library("here")
 library("minfi")
-methylation <- readRDS(here("data/methylation.rds"))
+methylation <- readRDS("data/methylation.rds")
 
 ## here, we transpose the matrix to have features as rows and samples as columns
 methyl_mat <- t(assay(methylation))
@@ -118,8 +118,11 @@ heatmap visualises the correlations for the first 500 features in the
 `methylation` dataset (we selected 500 features only as it can be hard to
 visualise patterns when there are too many features!).
 
-```{r corr-mat-meth, fig.cap="Heatmap of pairwise feature-feature correlations between CpG sites in DNA methylation data", fig.alt="A symmetrical heatmap where rows and columns are features in a DNA methylation dataset. Colour corresponds to correlation, with red being large positive correlations and blue being large negative correlations. There are large blocks of deep red and blue throughout the plot."}
+```{r cheatmap, results = "hide"}
 library("ComplexHeatmap")
+```
+
+```{r corr-mat-meth, fig.cap="Heatmap of pairwise feature-feature correlations between CpG sites in DNA methylation data", fig.alt="A symmetrical heatmap where rows and columns are features in a DNA methylation dataset. Colour corresponds to correlation, with red being large positive correlations and blue being large negative correlations. There are large blocks of deep red and blue throughout the plot."}
 small <- methyl_mat[, 1:500]
 cor_mat <- cor(small)
 Heatmap(cor_mat,
@@ -333,8 +336,8 @@ To compare the training and test errors for a model of methylation features and 
 data into training and test sets, fit a linear model and calculate the errors. First, let's
 calculate the training error. Let's start by splitting the data into training and test sets:
 
-```{r data}
-methylation <- readRDS(here::here("data/methylation.rds"))
+```{r data, results = "hide"}
+methylation <- readRDS("data/methylation.rds")
 
 library("SummarizedExperiment")
 age <- methylation$Age
@@ -521,7 +524,7 @@ When $\\lambda$ is small, we don't really care a lot about shrinking our coeffic
 just using ordinary least squares. We see how a penalty term, $\\lambda$, might be chosen later in this episode.
 
 For now, to see how regularisation might improve a model, let's fit a model using the same set
-of 20 features (stored as `features`) selected earlier in this episode (these
+of 20 features (stored as `cpg_markers`) selected earlier in this episode (these
 are a subset of the features identified by Horvarth et al), using both
 regularised and ordinary least squares. To fit regularised regression models, we will use the **`glmnet`** package.
 
@@ -529,7 +532,7 @@ regularised and ordinary least squares. To fit regularised regression models, we
 library("glmnet")
 
 ## glmnet() performs scaling by default, supply un-scaled data:
-horvath_mat <- methyl_mat[, features] # select the first 20 sites as before
+horvath_mat <- methyl_mat[, cpg_markers]
 train_mat <- horvath_mat[train_ind, ] # use the same individuals as selected before
 test_mat <- horvath_mat[-train_ind, ]
 

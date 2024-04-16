@@ -87,6 +87,7 @@ to understand), it does have some disadvantages, particularly difficulties in id
 initial clusters which observations belong to and the need for the user to specify the
 number of clusters that the data should be partitioned into.
 
+
 :::::::::::::::::::::::::::::::::::::::::  callout
 
 ### Initialisation
@@ -108,6 +109,8 @@ be addressed by choosing a good initialisation method, initialising clusters
 manually, or running the algorithm from multiple different starting points.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 ## Believing in clusters
 
@@ -154,6 +157,7 @@ plot the data. Putting ellipses around the clusters can further convince us
 that the clusters are 'real'. But how do we tell if clusters identified
 visually are 'real'?
 
+
 :::::::::::::::::::::::::::::::::::::::::  callout
 
 ### Initialisation
@@ -175,6 +179,8 @@ be addressed by choosing a good initialisation method, initialising clusters
 manually, or running the algorithm from multiple different starting points.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 ## K-means clustering applied to the single-cell RNA sequencing data
 
@@ -202,7 +208,7 @@ Let's load the *scRNAseq* data and calculate some principal components.
 library("SingleCellExperiment")
 library("scater")
 
-scrnaseq <- readRDS(here::here("data/scrnaseq.rds"))
+scrnaseq <- readRDS("data/scrnaseq.rds")
 scrnaseq <- runPCA(scrnaseq, ncomponents = 15)
 pcs <- reducedDim(scrnaseq)[, 1:2]
 ```
@@ -215,60 +221,21 @@ the underlying data, representing the two largest axes of variation.
 We can now run K-means clustering on the first and second principal components
 of the *scRNAseq* data using the `kmeans()` function.
 
-\`\`\`{r kmeans, fig.cap = "Scatter plot of principal component 2 versus principal component 1 with points colour coded according to the cluster to which they belong.", fig.alt = "A scatter plot of principal component 2 versus principal component 1 of the `scrnaseq` data. Each point is one of four colours, representing cluster membership. Points of the same colour appear in the same areas of the plot, showing four distinct clusters in the data."}
+```{r kmeans, fig.cap = "Scatter plot of principal component 2 versus principal component 1 with points colour coded according to the cluster to which they belong.", fig.alt = "A scatter plot of principal component 2 versus principal component 1 of the `scrnaseq` data. Each point is one of four colours, representing cluster membership. Points of the same colour appear in the same areas of the plot, showing four distinct clusters in the data."}
 set.seed(42)
-cluster \<- kmeans(pcs, centers = 4)
+cluster <- kmeans(pcs, centers = 4)
 scrnaseq$kmeans <- as.character(cluster$cluster)
-plotReducedDim(scrnaseq, "PCA", colour\_by = "kmeans")
-
-````
+plotReducedDim(scrnaseq, "PCA", colour_by = "kmeans")
+```
 
 We can see that this produces a sensible-looking partition of the data. 
 However, is it totally clear whether there might be more or fewer clusters
 here?
 
-> ## Challenge 1
-> 
-> Perform clustering to group the data into $k=5$ clusters, and plot it using `plotReducedDim()`.
-> Save this with a variable name that's different to what we just used,
-> because we'll use this again later.
-> 
-> > ## Solution
-> > 
-> > ```{r kmeans-ex, fig.cap="Scatter plot of principal component 2 against principal component 1 in the scRNAseq data, coloured by clusters produced by k-means clustering.", fig.alt="A scatter plot of principal component 1 versus principal component 2 of the scrnaseq data. Each point is one of five colours, representing cluster membership. Points of the same colour appear in the same areas of the plot, showing five distinct clusters in the data."}
-> > set.seed(42)
-> > cluster5 <- kmeans(pcs, centers = 5)
-> > scrnaseq$kmeans5 <- as.character(cluster5$cluster)
-> > plotReducedDim(scrnaseq, "PCA", colour_by = "kmeans5")
-> > ```
-> > 
-> {: .solution}
-{: .challenge}
 
-> ## K-medoids (PAM)
-> 
-> One problem with K-means is that using the mean to define cluster centroids
-> means that clusters can be very sensitive to outlying observations.
-> K-medoids, also known as "partitioning around medoids (PAM)" is similar to 
-> K-means, but uses the median rather than the mean as the method for defining
-> cluster centroids. Using the median rather than the mean reduces sensitivity of
-> clusters to outliers in the data. K-medioids has had popular application in
-> genomics, for example the well-known PAM50 gene set in breast cancer, which has seen some 
-> prognostic applications.
-> The following example shows how cluster centroids differ when created using 
-> medians rather than means.
->
-> ```{r, fig.cap="Scatter plot of random data y versus x with the (mean(x), mean(y)) co-ordinate point shown in red and the (median(x), median(y)) co-ordinate point shown in blue.", fig.alt="Scatter plot of random data y versus x. There are many black points on the plot representing the data. Two additional points are shown: the (mean(x), mean(y)) co-ordinate point in red and the (median(x), median(y)) co-ordinate point in blue. The median co-ordinate point in blue has a lower x value and is shown to the left of the red mean co-ordinate point."}
-> x <- rnorm(20)
-> y <- rnorm(20)
-> x[10] <- x[10] + 10
-> plot(x, y, pch = 16)
-> points(mean(x), mean(y), pch = 16, col = "firebrick")
-> points(median(x), median(y), pch = 16, col = "dodgerblue")
-> ```
-> PAM can be carried out using `pam()` from the **`cluster`** package.
-> 
-{: .callout}
+
+
+
 
 
 # Cluster separation
@@ -281,15 +248,22 @@ within the same cluster. For each cluster, the silhouette widths can then be
 averaged or an overall average can be taken.
 
 
-> ## More detail on silhouette widths
-> In more detail, each observation's silhouette width is computed as follows:  
-> 1. Compute the average distance between the focal observation and all other
-> observations in the same cluster.
-> 2. For each of the other clusters, compute the average distance between
-> focal observation and all observations in the other cluster. Keep the
-> smallest of these average distances.
-> 3. Subtract (1.)-(2.) then divivde by whichever is smaller (1.) or (2).
-{: .callout}
+:::::::::::::::::::::::::::::::::::::::::  callout
+
+## More detail on silhouette widths
+
+In more detail, each observation's silhouette width is computed as follows:  
+1. Compute the average distance between the focal observation and all other
+observations in the same cluster.
+2. For each of the other clusters, compute the average distance between
+focal observation and all observations in the other cluster. Keep the
+smallest of these average distances.
+3. Subtract (1.)-(2.) then divide by whichever is smaller (1.) or (2).
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
 
 Ideally, we would have only large positive silhouette widths, indicating
 that each data point is much more similar to points within its cluster than it
@@ -307,7 +281,7 @@ library("cluster")
 dist_mat <- dist(pcs)
 sil <- silhouette(cluster$cluster, dist = dist_mat)
 plot(sil, border = NA)
-````
+```
 
 Let's plot the silhouette score on the original dimensions used to cluster
 the data. Here, we're mapping cluster membership to point shape, and silhouette
@@ -367,11 +341,10 @@ This seems to be because some observations in clusters 3 and 5 seem to be
 more similar to other clusters than the one they have been assigned to.
 This may indicate that k is too high.
 
-
-
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
@@ -494,6 +467,8 @@ pheatmap(ratios,
 Yellow boxes indicate values slightly greater than 1, which may be observed.
 These are "good" (despite missing in the colour bar).
 
+
+
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ### Challenge 3
@@ -527,11 +502,10 @@ elements.
 This indicates that observations are "swapping" between these clusters
 in bootstrap replicates.
 
-
-
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
@@ -550,6 +524,8 @@ well in some situations. It also allows you to visualise how cluster
 membership changes over different values of k.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
@@ -579,8 +555,8 @@ methods (for example, graph-based clustering).
 
 Generally, these methods sacrifice a bit of accuracy for a big gain in speed.
 
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ### Further reading
 

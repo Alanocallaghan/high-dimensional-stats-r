@@ -103,7 +103,7 @@ library("minfi")
 library("here")
 library("ComplexHeatmap")
 
-methyl <- readRDS(here("data/methylation.rds"))
+methyl <- readRDS("data/methylation.rds")
 
 # transpose this Bioconductor dataset to show features in columns
 methyl_mat <- t(assay(methyl))
@@ -412,7 +412,7 @@ corresponding value of `k`.
 Now let us look into changing the default behaviour of `hclust()`. First, we'll load a synthetic dataset, comprised of two variables representing two crescent-shaped point clouds:
 
 ```{r crescents, fig.cap="Scatter plot of data simulated according to two crescent-shaped point clouds.", fig.alt="A scatter plot of data simulated to form two crescent shapes. The crescents are horizontally orientated with a a rough line of vertical symmetry."}
-cres <- readRDS(here::here("data/cres.rds"))
+cres <- readRDS("data/cres.rds")
 plot(cres)
 ```
 

@@ -121,7 +121,7 @@ Next, let's load the [`prostate`](https://carpentries-incubator.github.io/high-d
 
 ```{r prostate}
 library("here")
-prostate <- readRDS(here("data/prostate.rds"))
+prostate <- readRDS("data/prostate.rds")
 ```
 
 Examine the dataset (in which each row represents a single patient) to:
@@ -353,7 +353,7 @@ Bioconductor packages can be installed and used in `R` using the **`BiocManager`
 package. Let's load the **`minfi`** package from Bioconductor (a package for
 analysing Illumina Infinium DNA methylation arrays).
 
-```{r libminfi}
+```{r libminfi, results = "hide"}
 library("minfi")
 ```
 
@@ -374,11 +374,13 @@ These data include information collected from the
 assay as well as associated metadata from individuals from whom samples were
 taken.
 
-```{r libsload}
+```{r libsload, results = "hide"}
 library("here")
 library("ComplexHeatmap")
+```
 
-methylation <- readRDS(here("data/methylation.rds"))
+```{r dataload}
+methylation <- readRDS("data/methylation.rds")
 head(colData(methylation))
 
 methyl_mat <- t(assay(methylation))
