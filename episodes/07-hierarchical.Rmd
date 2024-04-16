@@ -24,10 +24,7 @@ math: yes
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r settings, include=FALSE}
-library("here")
-source(here("bin/chunk-options.R"))
-```
+
 
 ## Why use hierarchical clustering on high-dimensional data?
 

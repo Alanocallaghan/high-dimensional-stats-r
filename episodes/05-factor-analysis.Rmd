@@ -24,10 +24,7 @@ math: yes
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r setup, include=FALSE}
-library("here")
-source(here("bin/chunk-options.R"))
-```
+
 
 ## Introduction
 
